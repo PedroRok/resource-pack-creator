@@ -12,6 +12,10 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        'minecraft': ['Minecraft', 'sans-serif'],
+        'minecraft-bold': ['Minecraft Bold', 'sans-serif'],
+      },
     },
   },
   plugins: [],
