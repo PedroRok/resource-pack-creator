@@ -2,26 +2,37 @@
 
 import { useState } from "react";
 
-
 import McButton from "./Buttons";
 import { FileData } from "@/libs/packdata"; // Importar o tipo, sem a lógica do FS no frontend
 
-export default function FileSelector(props: { setSelected: (files: FileData[]) => void; selectedFiles: FileData[]; jsonFile: (path: string) => void }) {
-  const [expandedFolders, setExpandedFolders] = useState<{ [key: string]: boolean }>({});
+export default function FileSelector(props: {
+  setSelected: (files: FileData[]) => void;
+  selectedFiles: FileData[];
+  jsonFile: (path: string) => void;
+}) {
+  const [expandedFolders, setExpandedFolders] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [showPack, setShowPack] = useState<boolean>(true);
 
   const handleFileChange = async () => {
     try {
       // Abre o diálogo de seleção de diretório usando Electron
-      const selectedPaths = await window.electron.showOpenDialog({ properties: ["openDirectory"] });
+      const selectedPaths = await window.electron.showOpenDialog({
+        properties: ["openDirectory"],
+      });
       if (selectedPaths.length === 0) {
         return; // Usuário cancelou a seleção
       }
 
       const selectedPath = selectedPaths[0];
-      const response = await fetch(`/api/list-directory?path=${encodeURIComponent(selectedPath)}`);
+      const response = await fetch(
+        `/api/list-directory?path=${encodeURIComponent(selectedPath)}`
+      );
       if (!response.ok) {
-        throw new Error(`Failed to fetch directory tree: ${response.statusText}`);
+        throw new Error(
+          `Failed to fetch directory tree: ${response.statusText}`
+        );
       }
       const files: FileData[] = await response.json();
       props.setSelected(files);
@@ -68,23 +79,34 @@ export default function FileSelector(props: { setSelected: (files: FileData[]) =
             <li key={fullPath}>
               {file.isDirectory ? (
                 <>
-                  <span onClick={() => toggleFolder(fullPath)} className="cursor-pointer whitespace-nowrap">
+                  <span
+                    onClick={() => toggleFolder(fullPath)}
+                    className="cursor-pointer whitespace-nowrap"
+                  >
                     {expandedFolders[fullPath] ? "📂" : "📁"} {file.name}
                   </span>
                   {expandedFolders[fullPath] && file.children && (
-                    <div style={{ marginLeft: 20 }}>{renderFileTree(file.children, fullPath)}</div>
+                    <div style={{ marginLeft: 20 }}>
+                      {renderFileTree(file.children, fullPath)}
+                    </div>
                   )}
                 </>
+              ) : file.name.endsWith(".json") ? (
+                <span
+                  onClick={() => props.jsonFile(file.fullPath)}
+                  className="whitespace-nowrap hover:p-2"
+                >
+                  📝 {file.name}
+                </span>
               ) : (
-                file.name.endsWith(".json") ? (
-                  <span onClick={() => props.jsonFile(file.fullPath)} className="whitespace-nowrap hover:p-2">
-                    📝 {file.name}
-                  </span>
-                ) : (
-                  <span className="whitespace-nowrap">
-                    {file.name.endsWith(".png") ? "🖼️" : file.name.endsWith(".mcmeta") ? "⛏️" : "📄"} {file.name}
-                  </span>
-                )
+                <span className="whitespace-nowrap">
+                  {file.name.endsWith(".png")
+                    ? "🖼️"
+                    : file.name.endsWith(".mcmeta")
+                    ? "⛏️"
+                    : "📄"}{" "}
+                  {file.name}
+                </span>
               )}
             </li>
           );
@@ -96,13 +118,12 @@ export default function FileSelector(props: { setSelected: (files: FileData[]) =
   return (
     <div>
       {props.selectedFiles.length === 0 ? (
-        <McButton onClick={handleFileChange}>Selecionar</McButton>
-      ) : (
+        <McButton className="w-full" onClick={handleFileChange}>Select Folder</McButton>
+      ) : showPack ? (
         renderFileTree(props.selectedFiles)
-      )}
-      {!showPack && (
+      ) : (
         <div>
-          <p className="text-red-400">Arquivo 'pack.json' não encontrado ou inválido.</p>
+          <p className="text-red-400">Couldn't find the 'pack.mcmeta' file</p>
         </div>
       )}
     </div>

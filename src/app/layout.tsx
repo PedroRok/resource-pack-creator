@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "@/style/global.css";
 
 export const metadata: Metadata = {
-  title: "Resource Pack Maker - By Rok"
+  title: "Resource Pack Creator - By Rok"
 };
 
 

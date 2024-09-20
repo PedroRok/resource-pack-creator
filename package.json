@@ -1,5 +1,5 @@
 {
-  "name": "resoucepack-maker",
+  "name": "resoucepack-creator",
   "version": "0.1.0",
   "private": true,
   "main": "electron.js",

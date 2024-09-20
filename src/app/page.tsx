@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="h-16 bg-zinc-800 flex items-center justify-center max-h-[5vh]">
-        <h1 className="text-white text-xl">Painel Superior</h1>
+        <h1 className="text-white text-xl">Top Panel</h1>
       </header>
       <div className="flex flex-1 h-auto overflow-ellipsis max-h-[90vh]">
         <aside className="max-w-96 min-w-52 p-4 flex-2  resize-x">
