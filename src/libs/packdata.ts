@@ -6,8 +6,8 @@ export type FileData = {
   isDirectory: boolean;
   fullPath: string;
   relativePath: string;
-  stats: Stats;
   children?: FileData[];
+  jsonData?: any;
 };
 
 export type PackFileData = {
@@ -37,8 +37,6 @@ export class PackData {
         if (found) {
           return found;
         }
-      } else if (file.name === this.PACK_JSON_FILENAME) {
-        return file.stats.isFile() ? file : undefined;
       }
     }
     return undefined;

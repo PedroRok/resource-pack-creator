@@ -6,8 +6,9 @@ export type FileData = {
   name: string;
   isDirectory: boolean;
   fullPath: string;
-  relativePath: string;
+  relativePath: string | undefined;
   children?: FileData[];
+  jsonData?: any;
 };
 
 function listDirectoryTree(directoryPath: string): FileData[] {
@@ -19,6 +20,7 @@ function listDirectoryTree(directoryPath: string): FileData[] {
       fullPath: dir,
       relativePath: path.relative(directoryPath, dir),
       children: [],
+      jsonData: dir.endsWith(".json") || dir.endsWith(".mcmeta") ? JSON.parse(fs.readFileSync(dir, 'utf-8')) : undefined,
     };
 
     if (fileData.isDirectory) {
@@ -52,8 +54,6 @@ function removeCircularReferences(obj: any, seen: Set<any> = new Set()): any {
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const directoryPath = req.query.path as string;
-  console.log(`Received request to list directory: ${directoryPath}`);
-
   try {
     const files = listDirectoryTree(directoryPath);
     const sanitizedFiles = removeCircularReferences(files);

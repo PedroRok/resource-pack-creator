@@ -4,6 +4,7 @@ import McButton from "@/components/Buttons";
 import FileSelector from "@/components/FileSelector";
 import { FileData } from "@/libs/packdata";
 import { useState } from "react";
+import { validateJson } from "@/libs/jsondata";
 
 export default function Home() {
   const [selectedFiles, setSelectedFiles] = useState<FileData[]>([]);
@@ -20,7 +21,9 @@ export default function Home() {
               <FileSelector
                 selectedFiles={selectedFiles}
                 setSelected={(files: FileData[]) => setSelectedFiles(files)}
-                jsonFile={(path: string) => console.log(path)}
+                jsonFile={(file: FileData) => {
+                  validateJson(file);
+                }}
               />
             </div>
             <div className="flex-grow"></div>
