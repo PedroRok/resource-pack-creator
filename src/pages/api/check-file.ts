@@ -13,6 +13,7 @@ function getFile(directoryPath: string): FileData {
         relativePath: undefined,
         children: [],
         jsonData: dir.endsWith(".json") ? JSON.parse(fs.readFileSync(dir, 'utf-8')) : undefined,
+        imageData: dir.endsWith(".png") ? fs.readFileSync(dir).toString('base64') : undefined,
       };
   
       return fileData;

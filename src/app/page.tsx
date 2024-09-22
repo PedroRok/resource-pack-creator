@@ -5,6 +5,7 @@ import FileSelector from "@/components/FileSelector";
 import { FileData } from "@/libs/packdata";
 import { useState } from "react";
 import { validateJson } from "@/libs/jsondata";
+import TemplateCard from "@/components/TemplateCard";
 
 export default function Home() {
   const [selectedFiles, setSelectedFiles] = useState<FileData[]>([]);
@@ -15,19 +16,19 @@ export default function Home() {
         <h1 className="text-white text-xl">Top Panel</h1>
       </header>
       <div className="flex flex-1 h-auto overflow-ellipsis max-h-[90vh]">
-        <aside className="max-w-96 min-w-52 p-4 flex-2  resize-x">
-          <div className="flex flex-col h-full ">
-            <div className="overflow-y-auto">
-              <FileSelector
-                selectedFiles={selectedFiles}
-                setSelected={(files: FileData[]) => setSelectedFiles(files)}
-                jsonFile={(file: FileData) => {
-                  validateJson(file);
-                }}
-              />
-            </div>
+        <aside className="max-w-96 min-w-52 px-1 border-black border-y-4 flex-2 resize-x">
+          <div className="flex flex-col h-full">
+            <FileSelector
+              selectedFiles={selectedFiles}
+              setSelected={(files: FileData[]) => setSelectedFiles(files)}
+              jsonFile={(file: FileData) => {
+                validateJson(file);
+              }}
+            />
             <div className="flex-grow"></div>
-            {selectedFiles.length != 0 ? <McButton onClick={() => setSelectedFiles([])}>Close</McButton> : null}
+            {selectedFiles.length != 0 ? (
+              <McButton onClick={() => setSelectedFiles([])}>Close</McButton>
+            ) : null}
           </div>
         </aside>
         <main className="flex-1 bg-gray-800 p-8 border-black border-y-4 rounded-3xl">

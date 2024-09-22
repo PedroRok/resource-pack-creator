@@ -8,6 +8,7 @@ export type FileData = {
   relativePath: string;
   children?: FileData[];
   jsonData?: any;
+  imageData?: string;
 };
 
 export type PackFileData = {

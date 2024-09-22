@@ -9,6 +9,7 @@ export type FileData = {
   relativePath: string | undefined;
   children?: FileData[];
   jsonData?: any;
+  imageData?: string;
 };
 
 function listDirectoryTree(directoryPath: string): FileData[] {
@@ -21,6 +22,7 @@ function listDirectoryTree(directoryPath: string): FileData[] {
       relativePath: path.relative(directoryPath, dir),
       children: [],
       jsonData: dir.endsWith(".json") || dir.endsWith(".mcmeta") ? JSON.parse(fs.readFileSync(dir, 'utf-8')) : undefined,
+      imageData: dir.endsWith(".png") ? fs.readFileSync(dir).toString('base64') : undefined,
     };
 
     if (fileData.isDirectory) {
