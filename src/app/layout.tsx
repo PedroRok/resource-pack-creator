@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 declare global {
   interface Window {
     electron: {
+      saveFile(files: File[], toPath: string): unknown;
       showOpenDialog: (options: { properties: string[] }) => Promise<string[]>;
     };
   }

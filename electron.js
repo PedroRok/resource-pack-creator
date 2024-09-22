@@ -2,6 +2,7 @@ import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import isDev from 'electron-is-dev';
+import fs from 'fs';
 
 // Obter o diretório atual usando import.meta.url
 const __filename = fileURLToPath(import.meta.url);
@@ -15,6 +16,7 @@ function createWindow() {
     height: 800,
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'), // Certifique-se de que o caminho está correto
+      nodeIntegration: true,
     },
   });
   mainWindow.setResizable(false);
@@ -71,8 +73,27 @@ app.on('activate', () => {
   }
 });
 
-// Adicionando o handler para o evento 'show-open-dialog'
+
 ipcMain.handle("show-open-dialog", async (event, options) => {
   const result = await dialog.showOpenDialog(options);
   return result.filePaths; // Retorna o caminho selecionado
+});
+
+ipcMain.on('save-file', (event, files, toPath) => {
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const filePath = path.join(toPath, file.name);
+    fs.writeFile(filePath, Buffer.from(file.data), (err) => {
+      if (err) {
+        console.error(`Error saving file ${file.name}:`, err);
+        event.sender.send('save-file-error', err.message);
+      } else {
+        console.log(`File ${file.name} saved successfully.`);
+        event.sender.send('save-file-success', file.name);
+      }
+    });
+    console.log('File path:', filePath);
+  }
+
+  // Aqui você pode adicionar a lógica para salvar os arquivos no sistema de arquivos
 });
