@@ -22,9 +22,11 @@
     
     &:active {
       --shadow-color: #464747;
-      background-color: #313234;
-      border-bottom-width: 0;
-      border-top-width: 4px;
+      background-color: #00000000;
+      border-top-color: #00000000;
+      border-right: 0px solid;
+      border-left: 0px solid;
+      border-top-width: 3px;
     }
   
     & > span {
@@ -39,6 +41,12 @@
       padding: calc(2 * var(--size-base)) calc(4 * var(--size-base));
       text-align: center;
       user-select: none;
+    }
+
+    & > span:active {
+      border: 1px solid #1b1b1b;
+      border-bottom: 0px solid #313233;
+      background-color: #313234;
     }
 
   }

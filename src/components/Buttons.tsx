@@ -6,7 +6,6 @@ import "@/style/global.css";
 
 export default function McButton(props: { className?: string, onClick?: () => void, children: React.ReactNode}){
 	return (
-
 			<button
 				className={clsx("btn min-w-5 min-h-5", props.className)}
 				type="button"
